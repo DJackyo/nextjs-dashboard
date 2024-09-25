@@ -3,39 +3,48 @@
 import { useState } from "react";
 import { PencilIcon, TrashIcon, PlusIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
+// Definir el tipo para los ítems
+type Item = {
+  id: number;
+  value: string;
+};
+
 export default function Page() {
-  const [items, setItems] = useState([]);
+  // Especificar el tipo de items como un array de Item
+  const [items, setItems] = useState<Item[]>([]);
   const [newItem, setNewItem] = useState("");
-  const [editIndex, setEditIndex] = useState(null);
+  const [editIndex, setEditIndex] = useState<number | null>(null);
   const [editValue, setEditValue] = useState("");
   const [errorMessage, setErrorMessage] = useState(""); // Estado para el mensaje de error
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para el modal
-  const [itemToDelete, setItemToDelete] = useState(null); // ID del ítem a eliminar
+  const [itemToDelete, setItemToDelete] = useState<number | null>(null); // ID del ítem a eliminar
 
   const handleAddItem = () => {
     if (!newItem.trim()) {
       setErrorMessage("El campo no puede estar vacío."); // Mostrar mensaje de error
       return;
     }
-    const newItemWithId = { id: Date.now(), value: newItem };
+    const newItemWithId: Item = { id: Date.now(), value: newItem };
     setItems([...items, newItemWithId]);
     setNewItem("");
     setErrorMessage(""); // Limpiar mensaje de error
   };
 
-  const handleOpenModal = (id) => {
+  const handleOpenModal = (id: number) => {
     setItemToDelete(id);
     setIsModalOpen(true);
   };
 
   const handleDeleteItem = () => {
-    const newItems = items.filter((item) => item.id !== itemToDelete);
-    setItems(newItems);
-    setIsModalOpen(false);
-    setItemToDelete(null);
+    if (itemToDelete !== null) {
+      const newItems = items.filter((item) => item.id !== itemToDelete);
+      setItems(newItems);
+      setIsModalOpen(false);
+      setItemToDelete(null);
+    }
   };
 
-  const handleEditItem = (id) => {
+  const handleEditItem = (id: number) => {
     setEditIndex(id);
     const itemToEdit = items.find((item) => item.id === id);
     setEditValue(itemToEdit?.value || "");
@@ -52,7 +61,7 @@ export default function Page() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Simple CRUD con Next.js</h1>
+      <h1 className="text-2xl font-bold mb-4">Simple CRUD con Next.js y Tailwind</h1>
 
       {/* Input para añadir un nuevo item */}
       <div className="w-3/5 mx-auto mb-4 flex gap-2">
