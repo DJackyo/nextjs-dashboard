@@ -61,7 +61,7 @@ export default function Page() {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Simple CRUD con Next.js y Tailwind</h1>
+      <h1 className="text-2xl font-bold mb-4">Simple CRUD con Next.js</h1>
 
       {/* Input para añadir un nuevo item */}
       <div className="w-3/5 mx-auto mb-4 flex gap-2">
