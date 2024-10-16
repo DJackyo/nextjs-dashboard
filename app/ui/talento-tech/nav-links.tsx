@@ -18,6 +18,11 @@ const links = [
     href: '/talento-tech/simple-crud',
     icon: PlusCircleIcon,
   },
+  {
+    name: 'Optimización - Memorización',
+    href: '/talento-tech/optimization-memorization',
+    icon: DocumentDuplicateIcon,
+  },
   // { name: 'Customers', href: '/talento-tech/customers', icon: UserGroupIcon },
 ];
 

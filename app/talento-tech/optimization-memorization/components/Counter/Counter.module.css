@@ -1,0 +1,10 @@
+.counterContainer {
+    margin: 10px 0;
+}
+
+.button {
+    padding: 5px 10px;
+    background-color: lightblue;
+    border: none;
+    cursor: pointer;
+}
