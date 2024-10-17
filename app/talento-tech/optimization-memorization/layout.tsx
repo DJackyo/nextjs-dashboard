@@ -1,26 +1,94 @@
-"use client"; 
-import React, { useContext } from 'react';
-import { ThemeProvider, ThemeContext } from './context/ThemeContext';
-import ThemeSwitcher from './components/ThemeSwitcher/ThemeSwitcher';
+"use client";
+import React, { useContext } from "react";
+import { ThemeProvider, ThemeContext } from "./context/ThemeContext";
+import ThemeSwitcher from "./components/ThemeSwitcher/ThemeSwitcher";
+import CodeBlock from "./components/CodeBlock/CodeBlock";
+import Accordion from "./components/Accordion/Accordion";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const context = useContext(ThemeContext);
 
   if (!context) {
-    throw new Error('Layout debe ser usado dentro de un ThemeProvider');
+    throw new Error("Layout debe ser usado dentro de un ThemeProvider");
   }
 
   const { theme } = context;
+  const codeString = `
+"use client";
+import { lazy, Suspense, useState } from "react";
+import { ThemeProvider } from "./context/ThemeContext";
+import Counter from "./components/Counter/Counter";
+import ItemList from "./components/ItemList/ItemList";
 
+import SkeletonCounter from "./components/Skeleton/SkeletonCounter";
+import ListWithSuspense from "./components/ItemList/ListWithSuspense";
+
+export default function OptimizationMemorization() {
+  const LazyCounter = lazy(() => import("./components/Counter/Counter"));
+
+  const [items, setItems] = useState(["Item 1", "Item 2", "Item 3"]);
+
+  const addItem = () => {
+    setItems((prevItems) => [...prevItems, \`Item \${prevItems.length + 1}\`]);
+  };
   return (
-    <div className={`min-h-screen ${theme === 'light' ? 'bg-white text-black' : 'bg-gray-800 text-white'}`}>
-      <header className={`flex justify-between items-center p-4 ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-900'} shadow-md`}>
+    <ThemeProvider>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+        <div className=" p-4">
+          {/* <Counter/> */}
+          <Suspense fallback={<SkeletonCounter />}>
+            <LazyCounter />
+          </Suspense>
+        </div>
+        <div className=" p-4">
+          <div className="relative flex flex-col my-6  shadow-sm border border-slate-200 rounded-lg w-96">
+            <div className="mx-3 mb-0 border-b border-slate-200 pt-3 pb-2 px-1 flex flex-col ">
+              <span className="text-lg  font-medium">Listas</span>
+              <button
+                onClick={addItem}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+              >
+                Adicionar item
+              </button>
+            </div>
+            <div className="p-4">
+              {/* <ItemList items={items} /> */}
+              <ListWithSuspense items={items} />
+            </div>
+            <div className="mx-3 border-t border-slate-200 pb-3 pt-2 px-1"></div>
+          </div>
+        </div>
+      </div>
+    </ThemeProvider>
+  );
+}
+`;
+const accordionItems = [
+  {
+    header: "Código de la Página",
+    body: <CodeBlock code={codeString} language="typescript" />, 
+    footer: " ",
+  },
+];
+  return (
+    <div
+      className={`min-h-screen ${
+        theme === "light" ? "bg-white text-black" : "bg-gray-800 text-white"
+      }`}
+    >
+      <header
+        className={`flex justify-between items-center p-4 ${
+          theme === "light" ? "bg-gray-200" : "bg-gray-900"
+        } shadow-md`}
+      >
         <h1 className="text-xl">Optimización y Memorización</h1>
         <ThemeSwitcher />
       </header>
       <main className="p-4">{children}</main>
-      <footer className={`p-4 ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-900'}`}>
-        <p>Contenido del pie de página</p>
+      <footer
+        className={`p-4 ${theme === "light" ? "bg-gray-200" : "bg-gray-900"}`}
+      >
+        <Accordion items={accordionItems} />
       </footer>
     </div>
   );

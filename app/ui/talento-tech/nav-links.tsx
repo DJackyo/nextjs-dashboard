@@ -14,7 +14,7 @@ import clsx from 'clsx';
 const links = [
   { name: 'Home', href: '/talento-tech', icon: HomeIcon },
   {
-    name: 'CRUD',
+    name: 'Simple CRUD',
     href: '/talento-tech/simple-crud',
     icon: PlusCircleIcon,
   },
